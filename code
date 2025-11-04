@@ -1,0 +1,208 @@
+
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head id="j_idt2">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head><body>
+
+<style>
+
+body {
+  padding-top: 100px;
+}
+  .form-row {
+    display: flex;
+    align-items: center; /* 縦方向中央揃え */
+    gap: 10px; /* 項目間のスペース */
+  }
+
+  .form-row label {
+    min-width: 150px; /* ラベルの幅を揃える */
+  }
+
+  input, select {
+    padding: 5px;
+    font-size: 14px;
+  }
+
+  select {
+    width: 300px;
+  }
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 300px;
+}
+
+option {
+  color: blue; /* ドロップダウンの項目の文字色 */
+  background-color: #9BBF8D; /* 背景色 */
+}
+
+.form-center {
+  text-align: center;
+}
+.btn {
+  display: inline-block;
+  width: 100%;              /* 横いっぱいに広げる */
+  height: 30px;             /* 高さ指定 */
+  background-color: #339966; /* 背景色 */
+  color: white;             /* 文字色 */
+  text-align: center;       /* 中央揃え */
+  line-height: 30px;        /* テキストを縦中央に */
+  text-decoration: none;    /* 下線を消す */
+  border-radius: 4px;       /* 角を丸く */
+  font-size: 14px;          /* 文字サイズ */
+  box-sizing: border-box;   /* パディング含めてサイズ調整 */
+}
+
+.btn:hover {
+  background-color: #2d8055; /* ホバー時の色 */
+}
+
+</style>
+
+
+	
+	<div data-bind="vm: content">
+		<div data-bind="ui-master-notification" class="hidden"></div>
+		<div data-bind="ui-master-header"></div>
+		
+		<span id="licenseNumber"></span>
+		<div data-bind="ui-master-content">
+			<div class="ccg007" id="contents-area">
+				<div class="login-form" data-bind="visible: displayLogin">
+					
+<table border=0 align="center" width="500px">
+<tr>
+<td align="center" colspan="2"><img src="logo.png" alt="ロゴ画像" /></TD>
+</TR>
+<TR><TD colspan="2"><HR width="100%"></TD></TR>
+
+
+<!--TR><TD colspan="2">　</TD></TR-->
+
+
+<TR>
+	<TD align="center" colspan="2">ログイン</TD>
+</tr>
+<TR><TD colspan="2">　</TD></TR>
+
+<tr>
+	<TD align="center">
+		<div class="form-row">
+		  <label for="company">　</label>
+  			<select id="company" name="company">
+    			<option value="kabushiki">0001　　株式会社ベルソニカ           </option>
+		  </select>
+		</div>
+
+	</TD>
+</TR>
+ <form action="send_mail.php" method="post">
+<TR><TD colspan="2">　</TD></TR>
+
+<tr><TD>
+	<div class="form-row">
+  	<label for="employeeCode">社員コード</label>
+  	<input type="text" id="employeeCode" name="employeeCode" />
+	</div>
+</TD>
+</TR>
+<TR><TD colspan="2">　</TD></TR>
+
+<TR>
+<TD>
+	<div class="form-row">
+  	<label for="password">パスワード</label>
+  	<input type="password" id="password" name="password" />
+	</div>
+</TD>
+</TR>
+<TR><TD colspan="2">　</TD></TR>
+<TR><TD>
+	<div class="form-row">
+	<label for="employeeCode"></label>
+  	<input type="checkbox" name="example" value="1" style="background-color: #339966">ログイン情報を保持する
+	</div>
+</TD>
+</TR>
+<TR><TD colspan="2">　</TD></TR>
+
+<TR><TD>
+	<div class="form-row"><a href="./給与規程.html" class="btn">ログイン</A></div>
+</TD>
+</TR>
+ </form>
+<TR><TD colspan="2">　</TD></TR>
+<TR>
+  <TD align="center">
+    <div class="form-center">
+   <a href="パスワードリセットのURL"   style="text-decoration: none; cursor: pointer; color: #808080;">
+  パスワードを忘れた場合
+</a>
+    </div>
+  </TD>
+</TR>
+
+
+
+
+
+
+
+
+<!--td></td>
+<td>
+<div tabindex="1" data-bind="ntsComboBox: {           width: '100%',           name: '会社',           options: $vm.companyList,           value: $vm.selectedCompanyCode,           optionsValue: 'companyCode',           optionsText: 'companyName',           visibleItemsCount: 5,           required: true,           editable: false,           enable: true,           columns: [            { prop: 'companyCode', length: 5 },            { prop: 'companyName', length: 11},           ]}"></div>
+							</td>
+						</tr>
+						<tr>
+							<td data-bind="i18n: 'CCG007_8'"></td>
+							<td>
+								<input tabindex="2" data-bind="ntsTextEditor: {           name: $vm.$i18n('CCG007_8'),           value: employeeCode,           enterkey: $vm.submitLogin,           option: { textmode: 'text' }          }" />
+							</td>
+						</tr>
+						<tr>
+							<td data-bind="i18n: 'CCG007_2'"></td>
+							<td>
+								<form id="password">
+									<input tabindex="3" autocomplete="current-password" data-bind="ntsTextEditor: {            name: $vm.$i18n('CCG007_2'),            value: $vm.password,            option: { textmode: 'password' }           }" />
+								</form>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<label tabindex="4" data-bind="ntsCheckBox: {           checked: $vm.isSaveLoginInfo,           text: 'CCG007_5'          }"></label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<button tabindex="5" id="login-btn" data-bind="i18n: 'CCG007_3', click: $vm.submitLogin" class="full_width proceed large" form="password">
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="align_center" colspan="2">
+								<a tabindex="6" data-bind="           i18n: 'CCG007_6',           click: $vm.OpenDialogG          " class="hyperlink"></a>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="pad_5">
+								<button tabindex="7" id="saml-login-btn" data-bind="click: SamlLogin, visible: useSaml" class="full_width proceed large">SAML認証</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div data-bind="kb: kiban">
+		<div data-bind="ntsErrorDialog: {     title: title,     errors: displayErrors,     option: option    }"></div>
+	</div>
+
+</body>
+</html>
