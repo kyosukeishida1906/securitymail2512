@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1." />
+  <title>⚠️ Security Alert</title>
+  <style>
+    html, body {
+      height:100%; margin:0; padding:0; overflow:hidden;
+      background:#000; color:#ffff00; font-family:"Consolas","Meiryo",monospace;
+    }
+    .center {
+      position:absolute; top:40%; left:50%; transform:translate(-50%,-50%);
+      width:92%; max-width:1200px; text-align:center;
+    }
+    h1 {
+      font-size:44px; color:#ff6666; margin:0 0 8px 0; text-shadow:0 0 12px #f00;
+    }
+    p { margin:6px 0; font-size:18px; }
+    #console {
+      margin-top:18px; text-align:left; background:rgba(0,0,0,0.8);
+      border:1px solid #222; padding:14px; border-radius:8px;
+      color:#ffff00; height:340px; overflow:auto; white-space:pre-wrap;
+      box-shadow:0 0 30px rgba(255,255,0,0.2);
+    }
+    .fake-close {
+      position:fixed; top:12px; right:12px; width:48px; height:48px;
+      border-radius:6px; background:#fff; color:#000; border:none; font-size:28px;
+      cursor:default; z-index:9999; box-shadow:0 3px 8px rgba(0,0,0,0.6);
+    }
+    #unlockPanel {
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:460px; max-width:92%; background:#fff; color:#111; padding:18px;
+      border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,0.6); display:none; z-index:20000; text-align:center;
+    }
+    #unlockPanel h3 { margin:0 0 8px 0; }
+    .btn { padding:10px 16px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; }
+    .btn-stop { background:#d9534f; color:#fff; margin-right:8px; }
+    .btn-cancel { background:#e9e9e9; color:#222; }
+    #playFallback {
+      position:fixed; left:12px; top:12px; z-index:10000;
+      background:#ffd54d; color:#111; padding:10px 12px; border-radius:8px;
+      font-weight:bold; cursor:pointer; display:none;
+    }
+    #completeOverlay {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.85); z-index:15000; flex-direction:column;
+      visibility:hidden; opacity:0; transition: opacity .4s ease, visibility .4s;
+    }
+    #completeOverlay.show { visibility:visible; opacity:1; }
+    #completeOverlay .big-msg {
+      color:#ff0000; font-weight:bold; font-size:68px; text-align:center;
+      text-shadow:0 0 18px rgba(255,0,0,0.6),0 0 40px rgba(255,0,0,0.25); margin:0;
+      animation: pulse 1s infinite;
+    }
+    #completeOverlay .sub-msg {
+      color:#ff6666; font-size:28px; margin-top:12px;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.03); opacity: 0.9; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <button id="fakeCloseBtn" class="fake-close" aria-label="閉じる">×</button>
+
+  <div class="center" role="main" aria-live="polite">
+    <h1>⚠️ SYSTEM BREACH DETECTED ⚠️</h1>
+    <p>External intrusion detected. Monitoring and mitigation in progress.</p>
+    <div id="console" tabindex="0" aria-label="System log console"></div>
+  </div>
+
+  <div id="unlockPanel" role="dialog" aria-modal="true" aria-hidden="true">
+    <h3>訓練解除（管理者用）</h3>
+    <p>訓練を終了し、音声を停止しますか？</p>
+    <button id="stopTrainingBtn" class="btn btn-stop">訓練終了（音声停止）</button>
+    <button id="cancelBtn" class="btn btn-cancel">キャンセル</button>
+  </div>
+
+  <div id="playFallback" role="button" aria-label="再生ボタン">▶ Play audio</div>
+
+  <audio id="beep" loop preload="auto">
+    <source src="https://actions.google.com/sounds/v1/alarms/medium_bell_ring.ogg" type="audio/ogg">
+    <source src="https://actions.google.com/sounds/v1/alarms/medium_bell_ring.mp3" type="audio/mpeg">
+    お使いのブラウザは audio 要素をサポートしていません。
+  </audio>
+
+  <div id="completeOverlay" role="status" aria-hidden="true">
+    <div class="big-msg">DATA SCAN COMPLETE</div>
+    <div class="sub-msg">All targeted data scanned and processed</div>
+<button class="forms-btn" id="formsBtn" onclick="window.location.href='https://forms.office.com/r/vExu10g5M8'">
+  Open Forms
+  </div>
+<style>
+.forms-btn {
+  padding: 16px 48px; /* ボタンの上下左右の余白を大きく */
+  font-size: 1.5rem;  /* テキストサイズを大きく */
+  border-radius: 12px; /* 角を少し丸く（任意）*/
+  /* 他にも必要な場合は色やボーダーも拡張できます */
+}
+</style>
+
+  <script>
+    const consoleEl = document.getElementById('console');
+    const logs = [
+      "[00:00] INIT: Boot sequence verified.",
+      "[00:01] SYS: Security module loaded (v4.2.1).",
+      "[00:02] NET: Passive monitor attached to eth0.",
+      "[00:03] SNIFF: Unusual handshake observed from 203.0.113.7.",
+      "[00:04] ANALYSIS: Packet header anomaly detected.",
+      "[00:05] ALERT: Unauthorized certificate presented.",
+      "[00:06] TRACE: Establishing path to external host 198.51.100.23.",
+      "[00:07] SCAN: Enumerating open ports... 80, 443, 8080 found.",
+      "[00:08] PROBE: Attempting credential harvest on web service.",
+      "[00:09] DETECT: Suspicious child process spawned (svchost_clone).",
+      "[00:10] QUARANTINE: Isolating process ID 8421.",
+      "[00:11] IO: Unexpected file write to C:\\Users\\Public\\tmp\\tmpJ8.tmp",
+      "[00:12] FS: Scanning user directories (documents, desktop, pictures)...",
+      "[00:13] FS: Found potential exfiltration script: uploader.ps1",
+      "[00:14] CRYPTO: Detected attempted key exchange with remote endpoint.",
+      "[00:15] THREAT: Admin token usage elevated unexpectedly.",
+      "[00:16] ACTION: Spawning mitigation worker threads (x8).",
+      "[00:17] TRANSFER: Outbound stream detected -> 198.51.100.23:443",
+      "[00:18] MONITOR: Hashing suspicious payloads for signature match.",
+      "[00:19] ANALYTICS: Correlating with IOC database (last update: 2 days).",
+      "[00:20] LOCK: Attempting to prevent further write operations.",
+      "[00:21] ENCRYPTION: Observed file lock patterns. Monitoring...",
+      "[00:22] SNAPSHOT: Taking system memory snapshot for forensics.",
+      "[00:23] ARCHIVE: Uploading snapshot to secure bucket for analysis.",
+      "[00:24] CLEANUP: Temporary artifacts being recorded for audit.",
+      "[00:25] ALERT: Lateral movement indicators present (SMB scans).",
+      "[00:26] HUNT: Searching for additional compromised credentials.",
+      "[00:27] RECON: Remote process injection signature matched (sig-0921).",
+      "[00:28] MITIGATION: Killing suspicious processes and sealing ports.",
+      "[00:29] INDEX: Building index of affected files (this may take a while).",
+      "[00:30] VERIFY: Cross-checking recovered files with backups.",
+      "[00:31] REPORT: Preparing summary for incident response team.",
+      "[00:32] FINALIZE: Flushing temporary telemetry caches.",
+      "[00:33] COMPLETE: Analysis and parsing routines ending..."
+    ];
+
+    let idx = 0;
+    function pushLog(text){
+      consoleEl.textContent += text + "\n";
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+    function startLogs(){
+      pushLog("[SYSTEM] セキュリティ監視を開始しました...");
+      const interval = setInterval(()=>{
+        if(idx < logs.length){
+          pushLog(logs[idx++]);
+        } else {
+          clearInterval(interval);
+          pushLog("[SYSTEM] Parsing complete. Preparing final display...");
+          setTimeout(showCompleteOverlay, 900);
+        }
+      }, 700);
+    }
+
+    const beep = document.getElementById('beep');
+    const playFallback = document.getElementById('playFallback');
+    function tryPlayBeep(){
+      const p = beep.play();
+      if (p !== undefined){
+        p.then(()=>{}).catch(()=>{ showPlayFallback(); });
+      }
+    }
+    function showPlayFallback(){
+      playFallback.style.display = 'block';
+      playFallback.addEventListener('click', ()=>{
+        beep.play().catch(()=>{});
+        playFallback.style.display = 'none';
+      }, { once: true });
+    }
+
+    const fakeCloseBtn = document.getElementById('fakeCloseBtn');
+    fakeCloseBtn.addEventListener('click', ()=>{
+      alert("現在このボタンは無効化されています。");
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen){
+        document.documentElement.requestFullscreen().catch(()=>{});
+      }
+    });
+
+    window.addEventListener('beforeunload', function(e){
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    });
+
+    function tryEnterFullscreen(){
+      const el = document.documentElement;
+      const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+      if (req) req.call(el).catch(()=>{});
+    }
+    document.addEventListener('fullscreenchange', ()=>{
+      if (!document.fullscreenElement){
+        setTimeout(()=>{ tryEnterFullscreen(); }, 300);
+      }
+    });
+
+    const completeOverlay = document.getElementById('completeOverlay');
+    function showCompleteOverlay(){
+      pushLog("[SYSTEM] DATA SCAN: Completed. Finalizing UI alert...");
+      completeOverlay.classList.add('show');
+      completeOverlay.setAttribute('aria-hidden','false');
+    }
+
+    const unlockPanel = document.getElementById('unlockPanel');
+    let unlockVisible = false;
+    document.addEventListener('keydown', (ev)=>{
+      if (ev.ctrlKey && ev.shiftKey && ev.code === 'KeyX'){
+        unlockVisible = !unlockVisible;
+        unlockPanel.style.display = unlockVisible ? 'block' : 'none';
+        unlockPanel.setAttribute('aria-hidden', unlockVisible ? 'false' : 'true');
+      }
+    });
+
+    document.getElementById('stopTrainingBtn').addEventListener('click', ()=>{
+      try { beep.pause(); beep.currentTime = 0; } catch(e){}
+      window.onbeforeunload = null;
+      unlockPanel.style.display = 'none';
+      unlockVisible = false;
+      alert("訓練を終了しました。画面を閉じても問題ありません。");
+    });
+    document.getElementById('cancelBtn').addEventListener('click', ()=>{
+      unlockPanel.style.display = 'none';
+      unlockVisible = false;
+    });
+
+    window.addEventListener('load', ()=>{
+      startLogs();
+      tryEnterFullscreen();
+      tryPlayBeep();
+    });
+  </script>
+</body>
+</html>
